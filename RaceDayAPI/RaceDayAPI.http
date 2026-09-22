@@ -1,0 +1,26 @@
+@RaceDayAPI_HostAddress = https://localhost:7079
+
+### Register an Organiser
+POST {{RaceDayAPI_HostAddress}}/api/Auth/register
+Content-Type: application/json
+
+{
+  "firstName": "Test",
+  "lastName": "Organiser",
+  "email": "organiser@test.com",
+  "password": "TestPassword123!",
+  "role": "Organiser",
+  "phoneNumber": "0712345678"
+}
+
+### Login
+POST {{RaceDayAPI_HostAddress}}/api/Auth/login
+Content-Type: application/json
+
+{
+  "email": "organiser@test.com",
+  "password": "TestPassword123!"
+}
+
+### Logout
+POST {{RaceDayAPI_HostAddress}}/api/Auth/logout
