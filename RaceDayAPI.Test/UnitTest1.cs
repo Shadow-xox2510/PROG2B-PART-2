@@ -555,12 +555,36 @@ namespace RaceDayAPI.Tests
                 HttpContext = httpContext
             };
 
-            var result = await controller.GetMyResults();
+                       var result = await controller.GetMyResults();
 
             var okResult =
                 Assert.IsType<OkObjectResult>(result);
 
             Assert.NotNull(okResult.Value);
+        }
+
+        // TEST 9
+        [Fact]
+        public async Task Register_ShouldRejectInvalidRole()
+        {
+            using var context = CreateContext();
+
+            var controller = new AuthController(context);
+
+            var dto = new RegisterDto
+            {
+                FirstName = "Test",
+                LastName = "User",
+                Email = "invalidrole@test.com",
+                Password = "Password123!",
+                Role = "Admin",
+                PhoneNumber = "0821234567"
+            };
+
+            var result = await controller.Register(dto);
+
+            Assert.IsType<BadRequestObjectResult>(result);
+            Assert.Empty(context.Users);
         }
     }
 }
