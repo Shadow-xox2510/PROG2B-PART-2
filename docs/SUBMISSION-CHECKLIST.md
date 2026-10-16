@@ -12,7 +12,7 @@
 
 \- \[ ] README contains project and setup information.
 
-\- \[ ] Documentation is included.
+\- \[ ] Supporting documentation is included.
 
 
 
@@ -20,25 +20,35 @@
 
 
 
-\- \[ ] Solution builds successfully.
+\- \[x] Automated test suite completed with 9 passed and 0 failed.
 
-\- \[ ] Automated tests run successfully.
+\- \[ ] Release build verified after the latest changes.
 
-\- \[ ] GitHub Actions workflow completes successfully.
+\- \[ ] Latest GitHub Actions workflow succeeds.
 
-\- \[ ] CI evidence screenshot is included in the screenshots folder.
-
-
-
-\## Final Checks
+\- \[ ] CI evidence screenshot is present in the screenshots folder.
 
 
 
-\- \[ ] All intended files are committed and pushed to GitHub.
+\## Security
 
-\- \[ ] Repository contains the required submission evidence.
 
-\- \[ ] Any required demonstration video link is included.
 
-\- \[ ] Final submission follows the lecturer's rubric.
+\- \[x] Dependency vulnerability warnings identified and documented.
+
+\- \[ ] Dependency advisories reviewed and compatible updates assessed.
+
+
+
+\## Final Submission
+
+
+
+\- \[ ] All intended changes are pushed to GitHub.
+
+\- \[ ] Required demonstration video link is included, if required by the rubric.
+
+\- \[ ] Screenshots and other required evidence are present.
+
+\- \[ ] Final submission checked against the lecturer's rubric.
 
