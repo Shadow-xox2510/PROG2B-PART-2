@@ -150,11 +150,36 @@ The repository uses GitHub Actions to restore dependencies, build the solution, 
 
 \* Successful GitHub Actions build screenshot: `screenshots/part2-ci-green-check.png`
 
-\* Video presentation: \*\*Add your video link here\*\*
+
 
 
 
 \## Repository
+
+## Additional Documentation
+
+The following documents provide further information about the project:
+
+- [Project Structure](docs/PROJECT-STRUCTURE.md)
+- [API Endpoint Reference](docs/API-ENDPOINTS.md)
+- [Automated Testing](docs/TESTING.md)
+- [Test Results](docs/TEST-RESULTS.md)
+- [Continuous Integration Evidence](docs/CI-EVIDENCE.md)
+- [Troubleshooting Guide](docs/TROUBLESHOOTING.md)
+- [Security Review](docs/SECURITY-REVIEW.md)
+- [Submission Checklist](docs/SUBMISSION-CHECKLIST.md)
+
+## Final Verification
+
+Run the following commands from the repository root to restore dependencies, build the solution, and execute the automated tests:
+
+`dotnet restore RaceDayAPI.slnx`
+
+`dotnet build RaceDayAPI.slnx --configuration Release`
+
+`dotnet test RaceDayAPI.slnx`
+
+Review the output and GitHub Actions result before submitting the project.
 
 
 
