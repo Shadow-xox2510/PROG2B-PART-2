@@ -16,7 +16,11 @@ namespace RaceDayAPI.Controllers
             _context = context;
         }
 
+        // ==========================================
+        // GET USER PROFILE
         // GET: api/Profile
+        // ==========================================
+
         [HttpGet]
         public async Task<IActionResult> GetProfile()
         {
@@ -30,6 +34,7 @@ namespace RaceDayAPI.Controllers
             var userId = GetUserId()!.Value;
 
             var user = await _context.Users
+                .AsNoTracking()
                 .Where(u => u.UserID == userId)
                 .Select(u => new
                 {
@@ -54,15 +59,60 @@ namespace RaceDayAPI.Controllers
             return Ok(user);
         }
 
+        // ==========================================
+        // UPDATE USER PROFILE
         // PUT: api/Profile
+        // ==========================================
+
         [HttpPut]
-        public async Task<IActionResult> UpdateProfile(ProfileUpdateDto dto)
+        public async Task<IActionResult> UpdateProfile(
+            ProfileUpdateDto dto)
         {
             var loginCheck = RequireLogin();
 
             if (loginCheck != null)
             {
                 return loginCheck;
+            }
+
+            if (dto == null)
+            {
+                return BadRequest(new
+                {
+                    message = "Profile information is required."
+                });
+            }
+
+            if (string.IsNullOrWhiteSpace(dto.FirstName))
+            {
+                return BadRequest(new
+                {
+                    message = "First name is required."
+                });
+            }
+
+            if (string.IsNullOrWhiteSpace(dto.LastName))
+            {
+                return BadRequest(new
+                {
+                    message = "Last name is required."
+                });
+            }
+
+            if (string.IsNullOrWhiteSpace(dto.Email))
+            {
+                return BadRequest(new
+                {
+                    message = "Email address is required."
+                });
+            }
+
+            if (string.IsNullOrWhiteSpace(dto.PhoneNumber))
+            {
+                return BadRequest(new
+                {
+                    message = "Phone number is required."
+                });
             }
 
             var userId = GetUserId()!.Value;
@@ -78,8 +128,12 @@ namespace RaceDayAPI.Controllers
                 });
             }
 
+            var email = dto.Email.Trim();
+
             var emailExists = await _context.Users
-                .AnyAsync(u => u.Email == dto.Email && u.UserID != userId);
+                .AnyAsync(u =>
+                    u.Email == email &&
+                    u.UserID != userId);
 
             if (emailExists)
             {
@@ -89,10 +143,13 @@ namespace RaceDayAPI.Controllers
                 });
             }
 
-            user.FirstName = dto.FirstName;
-            user.LastName = dto.LastName;
-            user.Email = dto.Email;
-            user.PhoneNumber = dto.PhoneNumber;
+            user.FirstName = dto.FirstName.Trim();
+
+            user.LastName = dto.LastName.Trim();
+
+            user.Email = email;
+
+            user.PhoneNumber = dto.PhoneNumber.Trim();
 
             await _context.SaveChangesAsync();
 
