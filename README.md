@@ -618,7 +618,7 @@ RaceDay demonstrates the integration of ASP.NET Core MVC, REST APIs, SQL Server,
 
 
 
-The application supports race event management, participant enrolments, profile management, and race result recording.
+The applications supports race event management, participant enrolments, profile management, and race result recording.
 
 
 
