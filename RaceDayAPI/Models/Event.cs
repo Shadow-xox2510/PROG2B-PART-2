@@ -1,4 +1,5 @@
-﻿namespace RaceDayAPI.Models
+﻿
+namespace RaceDayAPI.Models
 {
     public class Event
     {
@@ -23,5 +24,8 @@
         public string Status { get; set; } = string.Empty;
 
         public string EventType { get; set; } = string.Empty;
+
+        public string? BannerImageName { get; set; }
     }
 }
+

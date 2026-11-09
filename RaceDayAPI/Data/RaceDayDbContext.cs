@@ -59,6 +59,10 @@ namespace RaceDayAPI.Data
                 .IsRequired()
                 .HasMaxLength(20);
 
+            modelBuilder.Entity<User>()
+                .Property(u => u.ProfilePictureName)
+                .HasMaxLength(255);
+
             // Routes
             modelBuilder.Entity<RaceDayAPI.Models.Route>()
                 .HasKey(r => r.RouteID);
@@ -126,6 +130,10 @@ namespace RaceDayAPI.Data
                 .Property(e => e.EventType)
                 .IsRequired()
                 .HasMaxLength(20);
+
+            modelBuilder.Entity<Event>()
+                .Property(e => e.BannerImageName)
+                .HasMaxLength(255);
 
             // Categories
             modelBuilder.Entity<Category>()

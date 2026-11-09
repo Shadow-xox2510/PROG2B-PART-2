@@ -1,4 +1,5 @@
-﻿namespace RaceDayAPI.Models
+﻿
+namespace RaceDayAPI.Models
 {
     public class User
     {
@@ -17,5 +18,7 @@
         public string PhoneNumber { get; set; } = string.Empty;
 
         public DateTime DateRegistered { get; set; }
+
+        public string? ProfilePictureName { get; set; }
     }
 }

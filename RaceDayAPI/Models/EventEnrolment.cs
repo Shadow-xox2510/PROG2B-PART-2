@@ -2,6 +2,7 @@
 {
     public class EventEnrolment
     {
+
         public int EnrolmentID { get; set; }
 
         public int EventID { get; set; }
