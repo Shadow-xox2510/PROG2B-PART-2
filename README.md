@@ -590,14 +590,6 @@ The unlisted YouTube demonstration covers:
 
 
 
-\*\*YouTube Demonstration:\*\*
-
-
-
-REPLACE\_WITH\_YOUR\_UNLISTED\_YOUTUBE\_LINK
-
-
-
 \## GitHub Repository
 
 
