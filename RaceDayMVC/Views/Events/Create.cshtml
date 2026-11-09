@@ -1,0 +1,351 @@
+﻿@model RaceDayMVC.Models.CreateEventViewModel
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = "Create Event";
+}
+
+<section class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="raceday-register-card p-4 p-md-5">
+
+                <!-- PAGE HEADING -->
+
+                <p class="raceday-section-label">
+                    ORGANISER PORTAL
+                </p>
+
+                <h1 class="mb-2">
+                    Create an Event
+                </h1>
+
+                <p class="text-muted mb-4">
+                    Add the details of your upcoming race.
+                    Complete all required fields to create your event.
+                </p>
+
+                <!-- SUCCESS / INFORMATION MESSAGE -->
+                @if (TempData["EventFormMessage"] != null)
+                {
+                    <div class="alert alert-info" role="alert">
+
+                        @TempData["EventFormMessage"]
+
+                    </div>
+                }
+
+                <!-- VALIDATION ERRORS -->
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3">
+                </div>
+
+                <!-- ====================================== -->
+                <!-- CREATE EVENT FORM -->
+                <!-- ====================================== -->
+
+                <form action="/Events/Create"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <!-- EVENT NAME -->
+
+                    <div class="mb-3">
+
+                        <label asp-for="EventName"
+                               class="form-label">
+                            Event Name
+                        </label>
+
+                        <input asp-for="EventName"
+                               name="EventName"
+                               id="EventName"
+                               class="form-control"
+                               placeholder="e.g. Cape Town Fun Run"
+                               required />
+
+                        <span asp-validation-for="EventName"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+                    <!-- DESCRIPTION -->
+
+                    <div class="mb-3">
+
+                        <label asp-for="Description"
+                               class="form-label">
+                            Description
+                        </label>
+
+                        <textarea asp-for="Description"
+                                  name="Description"
+                                  id="Description"
+                                  class="form-control"
+                                  rows="3"
+                                  placeholder="Describe the event"
+                                  required></textarea>
+
+                        <span asp-validation-for="Description"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+                    <!-- CATEGORY NAME -->
+
+                    <div class="mb-3">
+
+                        <label asp-for="CategoryName"
+                               class="form-label">
+                            Category Name
+                        </label>
+
+                        <input asp-for="CategoryName"
+                               name="CategoryName"
+                               id="CategoryName"
+                               class="form-control"
+                               placeholder="e.g. 5 km Open Category"
+                               required />
+
+                        <span asp-validation-for="CategoryName"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+                    <!-- CATEGORY DESCRIPTION -->
+
+                    <div class="mb-3">
+
+                        <label asp-for="CategoryDescription"
+                               class="form-label">
+                            Category Description
+                        </label>
+
+                        <textarea asp-for="CategoryDescription"
+                                  name="CategoryDescription"
+                                  id="CategoryDescription"
+                                  class="form-control"
+                                  rows="2"
+                                  placeholder="Describe who can enter this category"></textarea>
+
+                        <span asp-validation-for="CategoryDescription"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+                    <!-- EVENT DATE AND TYPE -->
+
+                    <div class="row">
+
+                        <!-- EVENT DATE -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <label asp-for="EventDate"
+                                   class="form-label">
+                                Event Date
+                            </label>
+
+                            <input asp-for="EventDate"
+                                   name="EventDate"
+                                   id="EventDate"
+                                   type="date"
+                                   class="form-control"
+                                   required />
+
+                            <span asp-validation-for="EventDate"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+                        <!-- EVENT TYPE -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <label asp-for="EventType"
+                                   class="form-label">
+                                Event Type
+                            </label>
+
+                            <select asp-for="EventType"
+                                    name="EventType"
+                                    id="EventType"
+                                    class="form-select"
+                                    required>
+
+                                <option value="Run">
+                                    Run
+                                </option>
+
+                                <option value="Walk">
+                                    Walk
+                                </option>
+
+                                <option value="Cycle">
+                                    Cycle
+                                </option>
+
+                            </select>
+
+                            <span asp-validation-for="EventType"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <!-- LOCATION -->
+
+                    <div class="mb-3">
+
+                        <label asp-for="Location"
+                               class="form-label">
+                            Location
+                        </label>
+
+                        <input asp-for="Location"
+                               name="Location"
+                               id="Location"
+                               class="form-control"
+                               placeholder="e.g. Green Point, Cape Town"
+                               required />
+
+                        <span asp-validation-for="Location"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+                    <!-- DISTANCE, ENTRY FEE AND CAPACITY -->
+
+                    <div class="row">
+
+                        <!-- DISTANCE -->
+
+                        <div class="col-md-4 mb-3">
+
+                            <label asp-for="DistanceKm"
+                                   class="form-label">
+                                Distance (km)
+                            </label>
+
+                            <input asp-for="DistanceKm"
+                                   name="DistanceKm"
+                                   id="DistanceKm"
+                                   type="number"
+                                   step="0.1"
+                                   min="0.1"
+                                   max="1000"
+                                   class="form-control"
+                                   required />
+
+                            <span asp-validation-for="DistanceKm"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+                        <!-- ENTRY FEE -->
+
+                        <div class="col-md-4 mb-3">
+
+                            <label asp-for="EntryFee"
+                                   class="form-label">
+                                Entry Fee (R)
+                            </label>
+
+                            <input asp-for="EntryFee"
+                                   name="EntryFee"
+                                   id="EntryFee"
+                                   type="number"
+                                   step="0.01"
+                                   min="0"
+                                   max="100000"
+                                   class="form-control"
+                                   required />
+
+                            <span asp-validation-for="EntryFee"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+                        <!-- MAXIMUM PARTICIPANTS -->
+
+                        <div class="col-md-4 mb-3">
+
+                            <label asp-for="MaximumParticipants"
+                                   class="form-label">
+                                Maximum Participants
+                            </label>
+
+                            <input asp-for="MaximumParticipants"
+                                   name="MaximumParticipants"
+                                   id="MaximumParticipants"
+                                   type="number"
+                                   min="1"
+                                   max="100000"
+                                   class="form-control"
+                                   required />
+
+                            <span asp-validation-for="MaximumParticipants"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ====================================== -->
+                    <!-- FORM BUTTONS -->
+                    <!-- ====================================== -->
+
+                    <div class="d-flex flex-wrap gap-2 mt-4">
+
+                        <!-- CREATE EVENT -->
+
+                        <button type="submit"
+                                class="btn btn-raceday">
+
+                            Create Event
+
+                        </button>
+
+                        <!-- BACK TO DASHBOARD -->
+
+                        <a href="/Organiser"
+                           class="btn btn-outline-secondary">
+
+                            Back to Dashboard
+
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}

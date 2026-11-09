@@ -1,0 +1,248 @@
+﻿@model List<RaceDayMVC.Models.EventViewModel>
+
+@using Microsoft.AspNetCore.Http
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = "Events";
+
+    bool isOrganiser =
+        Context.Session.GetString("Role") == "Organiser";
+}
+
+<section class="container py-5">
+
+    <!-- ========================================== -->
+    <!-- PAGE HEADING -->
+    <!-- ========================================== -->
+
+    <span class="raceday-badge">
+        RACEDAY EVENTS
+    </span>
+
+    <h1 class="mt-3">
+        Discover Your Next Race
+    </h1>
+
+    <p class="text-muted">
+        Find your next challenge and make every finish line count.
+    </p>
+
+    <!-- ========================================== -->
+    <!-- CREATE EVENT BUTTON -->
+    <!-- ========================================== -->
+    @if (isOrganiser)
+    {
+        <div class="mb-4">
+
+            <a asp-controller="Events"
+               asp-action="Create"
+               class="btn btn-raceday">
+
+                + Create New Event
+
+            </a>
+
+        </div>
+    }
+
+    <!-- ========================================== -->
+    <!-- SUCCESS MESSAGE -->
+    <!-- ========================================== -->
+    @if (TempData["EventSuccess"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+
+            @TempData["EventSuccess"]
+
+        </div>
+    }
+
+    <!-- ========================================== -->
+    <!-- ERROR MESSAGE -->
+    <!-- ========================================== -->
+    @if (TempData["EventError"] != null)
+    {
+        <div class="alert alert-danger" role="alert">
+
+            @TempData["EventError"]
+
+        </div>
+    }
+
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="alert alert-warning mt-4" role="alert">
+
+            @ViewBag.ErrorMessage
+
+        </div>
+    }
+
+    <!-- ========================================== -->
+    <!-- NO EVENTS FOUND -->
+    <!-- ========================================== -->
+    @if (Model == null || Model.Count == 0)
+    {
+        <div class="raceday-info-card mt-4">
+
+            <h4>
+                No events to display yet
+            </h4>
+
+            <p class="mb-0">
+                There are currently no events available to display.
+                If you recently created an event, please check
+                the message above.
+            </p>
+
+        </div>
+    }
+    else
+    {
+        <!-- ====================================== -->
+        <!-- EVENTS GRID -->
+        <!-- ====================================== -->
+
+        <div class="row g-4 mt-3">
+
+            @foreach (var item in Model)
+            {
+                <div class="col-md-6 col-lg-4">
+
+                    <div class="raceday-feature-card h-100">
+
+                        <!-- EVENT BANNER -->
+
+                        <img src="@Url.Action("Banner", "Events", new { id = item.EventID })"
+                             alt="@item.EventName banner"
+                             class="img-fluid rounded mb-3 event-banner-preview"
+                             style="width:100%;height:180px;object-fit:cover;" />
+
+                        <!-- EVENT NAME -->
+
+                        <h4>
+                            @item.EventName
+                        </h4>
+
+                        <!-- DESCRIPTION -->
+
+                        <p>
+                            @item.Description
+                        </p>
+
+                        <!-- EVENT DATE -->
+
+                        <p>
+                            <strong>Date:</strong>
+
+                            @(item.EventDate?.ToString("dd MMM yyyy")
+                                ?? "To be confirmed")
+                        </p>
+
+                        <!-- LOCATION -->
+
+                        <p>
+                            <strong>Location:</strong>
+
+                            @(item.Location ?? "To be confirmed")
+                        </p>
+
+                        <!-- DISTANCE -->
+
+                        <p>
+                            <strong>Distance:</strong>
+
+                            @item.DistanceKm km
+                        </p>
+
+                        <!-- ENTRY FEE -->
+
+                        <p>
+                            <strong>Entry fee:</strong>
+
+                            @item.EntryFee.ToString(
+                                "C",
+                                System.Globalization.CultureInfo.GetCultureInfo("en-ZA"))
+                        </p>
+
+                        <!-- STATUS -->
+
+                        <p>
+                            <strong>Status:</strong>
+
+                            @(item.Status ?? "Not specified")
+                        </p>
+
+                        <!-- MAXIMUM PARTICIPANTS -->
+
+                        <p>
+                            <strong>Maximum participants:</strong>
+
+                            @item.MaximumParticipants
+                        </p>
+
+                        <!-- ================================= -->
+                        <!-- EVENT ACTION BUTTONS -->
+                        <!-- ================================= -->
+
+                        <div class="mt-3">
+
+                            @if (isOrganiser)
+                            {
+                                <!-- EDIT EVENT -->
+
+                                <a asp-controller="Events"
+                                   asp-action="Edit"
+                                   asp-route-id="@item.EventID"
+                                   class="btn btn-outline-primary btn-sm me-1 mb-2">
+
+                                    Edit
+
+                                </a>
+
+                                <!-- DELETE EVENT -->
+
+                                <a asp-controller="Events"
+                                   asp-action="Delete"
+                                   asp-route-id="@item.EventID"
+                                   class="btn btn-outline-danger btn-sm me-1 mb-2">
+
+                                    Delete
+
+                                </a>
+
+                                <!-- VIEW ENROLMENTS -->
+
+                                <a asp-controller="Organiser"
+                                   asp-action="Enrolments"
+                                   asp-route-eventId="@item.EventID"
+                                   class="btn btn-outline-success btn-sm me-1 mb-2">
+
+                                    View Enrolments
+
+                                </a>
+                            }
+
+                            <!-- VIEW EVENT DETAILS -->
+
+                            <a asp-controller="Participant"
+                               asp-action="EventDetails"
+                               asp-route-id="@item.EventID"
+                               class="btn btn-raceday btn-sm me-1 mb-2">
+
+                                View Details
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+    }
+
+</section>
