@@ -1,0 +1,189 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model RaceDayMVC.Models.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="raceday-register-card">
+
+                <div class="text-center mb-4">
+                    <h1 class="fw-bold">Join RaceDay</h1>
+                    <p class="text-muted">
+                        Create your account and get ready for your next challenge.
+                    </p>
+                </div>
+
+                @* Registration success message *@
+                @if (TempData["RegistrationSuccess"] != null)
+                {
+                    <div class="alert alert-success" role="alert">
+                        @TempData["RegistrationSuccess"]
+                    </div>
+                }
+
+                @* Show validation errors *@
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div asp-validation-summary="All"
+                         class="alert alert-danger"
+                         role="alert">
+                    </div>
+                }
+
+                <form action="/Account/Register"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    @* First Name *@
+                    <div class="mb-3">
+                        <label for="FirstName" class="form-label">
+                            First name
+                        </label>
+
+                        <input asp-for="FirstName"
+                               name="FirstName"
+                               id="FirstName"
+                               class="form-control"
+                               placeholder="Enter your first name"
+                               required />
+
+                        <span asp-validation-for="FirstName"
+                              class="text-danger"></span>
+                    </div>
+
+                    @* Last Name *@
+                    <div class="mb-3">
+                        <label for="LastName" class="form-label">
+                            Last name
+                        </label>
+
+                        <input asp-for="LastName"
+                               name="LastName"
+                               id="LastName"
+                               class="form-control"
+                               placeholder="Enter your last name"
+                               required />
+
+                        <span asp-validation-for="LastName"
+                              class="text-danger"></span>
+                    </div>
+
+                    @* Email Address *@
+                    <div class="mb-3">
+                        <label for="Email" class="form-label">
+                            Email address
+                        </label>
+
+                        <input asp-for="Email"
+                               name="Email"
+                               id="Email"
+                               type="email"
+                               class="form-control"
+                               placeholder="you@example.com"
+                               autocomplete="email"
+                               required />
+
+                        <span asp-validation-for="Email"
+                              class="text-danger"></span>
+                    </div>
+
+                    @* Phone Number *@
+                    <div class="mb-3">
+                        <label for="PhoneNumber" class="form-label">
+                            South African phone number
+                        </label>
+
+                        <input asp-for="PhoneNumber"
+                               name="PhoneNumber"
+                               id="PhoneNumber"
+                               type="tel"
+                               class="form-control"
+                               placeholder="e.g. 0821234567"
+                               required />
+
+                        <span asp-validation-for="PhoneNumber"
+                              class="text-danger"></span>
+                    </div>
+
+                    @* Password *@
+                    <div class="mb-3">
+                        <label for="Password" class="form-label">
+                            Password
+                        </label>
+
+                        <input asp-for="Password"
+                               name="Password"
+                               id="Password"
+                               type="password"
+                               class="form-control"
+                               placeholder="Create a strong password"
+                               autocomplete="new-password"
+                               minlength="8"
+                               required />
+
+                        <span asp-validation-for="Password"
+                              class="text-danger"></span>
+
+                        <small class="text-muted">
+                            Password must contain at least 8 characters.
+                        </small>
+                    </div>
+
+                    @* Account Type *@
+                    <div class="mb-4">
+                        <label for="Role" class="form-label">
+                            Account type
+                        </label>
+
+                        <select asp-for="Role"
+                                name="Role"
+                                id="Role"
+                                class="form-select"
+                                required>
+
+                            <option value="Participant">
+                                Participant
+                            </option>
+
+                            <option value="Organiser">
+                                Organiser
+                            </option>
+
+                        </select>
+
+                        <span asp-validation-for="Role"
+                              class="text-danger"></span>
+                    </div>
+
+                    @* Create Account Button *@
+                    <button type="submit"
+                            class="btn btn-raceday w-100">
+                        Create Account
+                    </button>
+
+                </form>
+
+                @* Login Link *@
+                <div class="text-center mt-4">
+                    <p class="mb-0">
+                        Already have an account?
+
+                        <a href="/Account/Login">
+                            Login here
+                        </a>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

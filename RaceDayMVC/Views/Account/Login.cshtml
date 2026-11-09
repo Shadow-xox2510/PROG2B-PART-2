@@ -1,0 +1,123 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model RaceDayMVC.Models.LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<section class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+
+            <div class="raceday-register-card">
+
+                <div class="text-center mb-4">
+
+                    <span class="raceday-badge">
+                        WELCOME BACK
+                    </span>
+
+                    <h1 class="mt-3">
+                        Login to RaceDay
+                    </h1>
+
+                    <p class="text-muted">
+                        Sign in to manage your races and events.
+                    </p>
+
+                </div>
+
+                @* Registration Success Message *@
+                @if (TempData["RegistrationSuccess"] != null)
+                {
+                    <div class="alert alert-success"
+                         role="alert">
+
+                        @TempData["RegistrationSuccess"]
+
+                    </div>
+                }
+
+                @* Login Validation Errors *@
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div asp-validation-summary="All"
+                         class="alert alert-danger"
+                         role="alert">
+                    </div>
+                }
+
+                <form action="/Account/Login"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    @* Email Address *@
+                    <div class="mb-3">
+
+                        <label for="Email"
+                               class="form-label">
+                            Email address
+                        </label>
+
+                        <input asp-for="Email"
+                               name="Email"
+                               id="Email"
+                               type="email"
+                               class="form-control"
+                               placeholder="you@example.com"
+                               autocomplete="email"
+                               required />
+
+                        <span asp-validation-for="Email"
+                              class="text-danger"></span>
+
+                    </div>
+
+                    @* Password *@
+                    <div class="mb-4">
+
+                        <label for="Password"
+                               class="form-label">
+                            Password
+                        </label>
+
+                        <input asp-for="Password"
+                               name="Password"
+                               id="Password"
+                               type="password"
+                               class="form-control"
+                               placeholder="Enter your password"
+                               autocomplete="current-password"
+                               required />
+
+                        <span asp-validation-for="Password"
+                              class="text-danger"></span>
+
+                    </div>
+
+                    @* Login Button *@
+                    <button type="submit"
+                            class="btn btn-raceday w-100">
+                        Login
+                    </button>
+
+                </form>
+
+                @* Register Link *@
+                <p class="text-center mt-4 mb-0">
+                    Don't have an account?
+
+                    <a href="/Account/Register">
+                        Register here
+                    </a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
