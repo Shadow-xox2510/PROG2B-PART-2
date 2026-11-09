@@ -1,10 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using RaceDayAPI.Data;
+using RaceDayAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add controllers
 builder.Services.AddControllers();
+
+builder.Services.AddScoped<BlobStorageService>();
 
 // Add Entity Framework Core
 builder.Services.AddDbContext<RaceDayDbContext>(options =>
