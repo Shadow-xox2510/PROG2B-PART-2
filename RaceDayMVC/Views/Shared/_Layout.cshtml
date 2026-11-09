@@ -1,0 +1,271 @@
+﻿@using Microsoft.AspNetCore.Http
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    var userId = Context.Session.GetInt32("UserID");
+    var userRole = Context.Session.GetString("Role");
+
+    bool isLoggedIn = userId.HasValue &&
+                      (userRole == "Organiser" ||
+                       userRole == "Participant");
+
+    string dashboardUrl = userRole == "Organiser"
+        ? "/Organiser"
+        : "/Participant";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - RaceDay</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <!-- RaceDay Custom CSS -->
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+</head>
+
+<body>
+
+    <!-- ========================================== -->
+    <!-- NAVIGATION BAR -->
+    <!-- ========================================== -->
+
+    <header>
+
+        <nav class="navbar navbar-expand-lg navbar-dark raceday-navbar">
+
+            <div class="container">
+
+                <!-- RaceDay Logo -->
+
+                <a class="navbar-brand fw-bold"
+                   href="/">
+
+                    <span class="raceday-logo">R</span>
+
+                    RaceDay
+
+                </a>
+
+                <!-- Mobile Navigation Button -->
+
+                <button class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#racedayNavigation"
+                        aria-controls="racedayNavigation"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
+
+                    <span class="navbar-toggler-icon"></span>
+
+                </button>
+
+                <!-- Navigation Links -->
+
+                <div class="collapse navbar-collapse"
+                     id="racedayNavigation">
+
+                    <ul class="navbar-nav ms-auto align-items-lg-center">
+
+                        <!-- HOME -->
+
+                        <li class="nav-item">
+
+                            <a class="nav-link"
+                               href="/">
+
+                                Home
+
+                            </a>
+
+                        </li>
+
+                        <!-- EVENTS -->
+
+                        <li class="nav-item">
+
+                            <a class="nav-link"
+                               asp-controller="Events"
+                               asp-action="Index">
+
+                                Events
+
+                            </a>
+
+                        </li>
+
+                        @if (isLoggedIn)
+                        {
+                            <!-- ================================= -->
+                            <!-- USER IS LOGGED IN -->
+                            <!-- ================================= -->
+
+                            <!-- DASHBOARD -->
+
+                            <li class="nav-item">
+
+                                <a class="nav-link"
+                                   href="@dashboardUrl">
+
+                                    Dashboard
+
+                                </a>
+
+                            </li>
+
+                            <!-- LOGOUT -->
+
+                            <li class="nav-item ms-lg-2">
+
+                                <form action="/Account/Logout"
+                                      method="post"
+                                      class="d-inline">
+
+                                    @Html.AntiForgeryToken()
+
+                                    <button type="submit"
+                                            class="btn btn-raceday">
+
+                                        Logout
+
+                                    </button>
+
+                                </form>
+
+                            </li>
+                        }
+                        else
+                        {
+                            <!-- ================================= -->
+                            <!-- USER IS NOT LOGGED IN -->
+                            <!-- ================================= -->
+
+                            <!-- LOGIN -->
+
+                            <li class="nav-item">
+
+                                <a class="nav-link"
+                                   href="/Account/Login">
+
+                                    Login
+
+                                </a>
+
+                            </li>
+
+                            <!-- REGISTER -->
+
+                            <li class="nav-item ms-lg-2">
+
+                                <a class="btn btn-raceday"
+                                   href="/Account/Register">
+
+                                    Join RaceDay
+
+                                </a>
+
+                            </li>
+                        }
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </nav>
+
+    </header>
+
+    <!-- ========================================== -->
+    <!-- MAIN PAGE CONTENT -->
+    <!-- ========================================== -->
+
+    <main role="main">
+
+        @if (TempData["LogoutSuccess"] != null)
+        {
+            <div class="container mt-3">
+
+                <div class="alert alert-success alert-dismissible fade show"
+                     role="alert">
+
+                    @TempData["LogoutSuccess"]
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="alert"
+                            aria-label="Close">
+                    </button>
+
+                </div>
+
+            </div>
+        }
+
+        @RenderBody()
+
+    </main>
+
+    <!-- ========================================== -->
+    <!-- FOOTER -->
+    <!-- ========================================== -->
+
+    <footer class="raceday-footer mt-5">
+
+        <div class="container py-4 text-center">
+
+            <p class="mb-1 fw-bold">
+
+                RaceDay
+
+            </p>
+
+            <p class="mb-0 small">
+
+                Every race tells a story. Make yours count.
+
+            </p>
+
+            <p class="mb-0 small">
+
+                &copy; @DateTime.Now.Year RaceDay
+
+            </p>
+
+        </div>
+
+    </footer>
+
+    <!-- ========================================== -->
+    <!-- JAVASCRIPT -->
+    <!-- ========================================== -->
+
+    <!-- JQuery -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <!-- Bootstrap JavaScript -->
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- RaceDay JavaScript -->
+    <script src="~/js/site.js"
+            asp-append-version="true"></script>
+
+    <!-- Page Validation Scripts -->
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+
+</html>
