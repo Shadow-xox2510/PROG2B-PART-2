@@ -1,0 +1,185 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@model List<RaceDayMVC.Models.EnrolmentViewModel>
+
+@{
+    ViewData["Title"] = "Event Enrolments";
+}
+
+<section class="container py-5">
+
+    <span class="raceday-badge">ORGANISER PORTAL</span>
+
+    <div class="mb-4 mt-3">
+
+        <h1>Event Enrolments</h1>
+
+        <p class="text-muted">
+            View the participants registered for this event
+            and record their race results.
+        </p>
+
+    </div>
+
+    @if (TempData["EventSuccess"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["EventSuccess"]
+        </div>
+    }
+
+    @if (TempData["EventError"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["EventError"]
+        </div>
+    }
+
+    <div class="raceday-register-card p-4">
+
+        <h4 class="mb-3">Registered Participants</h4>
+
+        @if (Model == null || Model.Count == 0)
+        {
+            <div class="alert alert-info">
+
+                No participants have enrolled in this
+                event yet.
+
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info mb-4">
+
+                Total Registered Participants:
+                <strong>@Model.Count</strong>
+
+            </div>
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <thead>
+                        <tr>
+                            <th>Participant</th>
+                            <th>Email</th>
+                            <th>Category ID</th>
+                            <th>Enrolment Date</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var enrolment in Model)
+                        {
+                            <tr>
+
+                                <!-- PARTICIPANT NAME -->
+
+                                <td>
+                                    @enrolment.ParticipantName
+                                </td>
+
+                                <!-- EMAIL -->
+
+                                <td>
+                                    @enrolment.Email
+                                </td>
+
+                                <!-- CATEGORY -->
+
+                                <td>
+                                    @enrolment.CategoryID
+                                </td>
+
+                                <!-- ENROLMENT DATE -->
+
+                                <td>
+                                    @enrolment.EnrolmentDate.ToString(
+                                        "dd MMM yyyy")
+                                </td>
+
+                                <!-- STATUS -->
+
+                                <td>
+
+                                    @if (enrolment.Status == "Registered")
+                                    {
+                                        <span class="badge bg-success">
+                                            Registered
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">
+                                            @enrolment.Status
+                                        </span>
+                                    }
+
+                                </td>
+
+                                <!-- ACTION -->
+
+                                <td>
+
+                                    @if (enrolment.HasResult)
+                                    {
+                                        <span class="badge bg-success">
+                                            Result Recorded
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <a href="@Url.Action(
+                                                "CaptureResult",
+                                                "Organiser",
+                                                new
+                                                {
+                                                    enrolmentId = enrolment.EnrolmentID,
+                                                    eventId = enrolment.EventID,
+                                                    participantName = enrolment.ParticipantName
+                                                })"
+                                           class="btn btn-raceday btn-sm">
+
+                                            Capture Result
+
+                                        </a>
+                                    }
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+
+        <div class="d-flex flex-wrap gap-2 mt-4">
+
+            <a href="@Url.Action("Index", "Events")"
+               class="btn btn-outline-secondary">
+
+                Back to Events
+
+            </a>
+
+            <a href="@Url.Action("Index", "Organiser")"
+               class="btn btn-raceday">
+
+                Organiser Dashboard
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
