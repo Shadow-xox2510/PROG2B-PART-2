@@ -1,0 +1,149 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@model List<RaceDayMVC.Models.EnrolmentViewModel>
+
+@{
+    ViewData["Title"] = "My Enrolments";
+}
+
+<section class="container py-5">
+
+    <span class="raceday-badge">PARTICIPANT DASHBOARD</span>
+
+    <h1 class="mt-3">My Enrolments</h1>
+
+    <p class="text-muted">
+        Keep track of the races you have registered for.
+    </p>
+
+    @if (TempData["EnrolmentSuccess"] != null)
+    {
+        <div class="alert alert-success mt-3">
+            @TempData["EnrolmentSuccess"]
+        </div>
+    }
+
+    @if (TempData["EnrolmentError"] != null)
+    {
+        <div class="alert alert-danger mt-3">
+            @TempData["EnrolmentError"]
+        </div>
+    }
+
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="alert alert-warning mt-3">
+            @ViewBag.ErrorMessage
+        </div>
+    }
+
+    <div class="d-flex flex-wrap gap-2 mt-4 mb-4">
+
+        <a href="@Url.Action("Index", "Participant")"
+           class="btn btn-outline-secondary">
+            Back to Dashboard
+        </a>
+
+        <a href="@Url.Action("Index", "Events")"
+           class="btn btn-raceday">
+            Explore Events
+        </a>
+
+    </div>
+
+    @if (Model == null || Model.Count == 0)
+    {
+        <div class="raceday-info-card mt-4">
+
+            <h4>You haven't enrolled in any events yet.</h4>
+
+            <p>
+                Explore the available RaceDay events and
+                register for your next challenge!
+            </p>
+
+            <a href="@Url.Action("Index", "Events")"
+               class="btn btn-raceday">
+                Browse Available Events
+            </a>
+
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info mb-4">
+            You are currently registered for
+            <strong>@Model.Count</strong>
+            event(s).
+        </div>
+
+        <div class="row g-4 mt-3">
+
+            @foreach (var item in Model)
+            {
+                <div class="col-md-6 col-lg-4">
+
+                    <div class="raceday-feature-card h-100">
+
+                        <div class="raceday-feature-icon">🏃</div>
+
+                        <h4>@item.EventName</h4>
+
+                        <hr />
+
+                        <p>
+                            <strong>Event ID:</strong>
+                            @item.EventID
+                        </p>
+
+                        <p>
+                            <strong>Category ID:</strong>
+                            @item.CategoryID
+                        </p>
+
+                        <p>
+                            <strong>Enrolment Date:</strong>
+                            @item.EnrolmentDate.ToString("dd MMM yyyy")
+                        </p>
+
+                        <p>
+                            <strong>Registration Status:</strong>
+
+                            @if (string.Equals(
+                                item.Status,
+                                "Registered",
+                                StringComparison.OrdinalIgnoreCase))
+                            {
+                                <span class="badge bg-success">
+                                    Registered
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">
+                                    @item.Status
+                                </span>
+                            }
+                        </p>
+
+                        <div class="mt-3">
+
+                            <a href="@Url.Action(
+                                    "EventDetails",
+                                    "Participant",
+                                    new { id = item.EventID })"
+                               class="btn btn-raceday btn-sm">
+                                View Event Details
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+    }
+
+</section>
