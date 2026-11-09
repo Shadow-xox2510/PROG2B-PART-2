@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RaceDayAPI.Data;
 using RaceDayAPI.DTOs;
@@ -17,6 +18,7 @@ namespace RaceDayAPI.Controllers
             _context = context;
         }
 
+        // GET: api/Events
         [HttpGet]
         public async Task<IActionResult> GetEvents()
         {
@@ -47,11 +49,18 @@ namespace RaceDayAPI.Controllers
             return Ok(events);
         }
 
+        // GET: api/Events/5
+        // GET: api/Events/5
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetEvent(int id)
         {
             var loginCheck = RequireLogin();
-            if (loginCheck != null) return loginCheck;
+
+            if (loginCheck != null)
+            {
+                return loginCheck;
+            }
 
             var eventDetails = await _context.Events
                 .Where(e => e.EventID == id)
@@ -83,9 +92,39 @@ namespace RaceDayAPI.Controllers
                 });
             }
 
-            return Ok(eventDetails);
+            // Retrieve the category associated with this event.
+
+            var category = await _context.Categories
+                .Where(c => c.EventID == id)
+                .OrderBy(c => c.CategoryID)
+                .Select(c => new
+                {
+                    c.CategoryName,
+                    c.Description
+                })
+                .FirstOrDefaultAsync();
+
+            return Ok(new
+            {
+                eventDetails.EventID,
+                eventDetails.EventName,
+                eventDetails.Description,
+                eventDetails.EventDate,
+                eventDetails.Location,
+                eventDetails.DistanceKm,
+                eventDetails.EventType,
+                eventDetails.OrganiserID,
+                eventDetails.Status,
+                eventDetails.EntryFee,
+                eventDetails.MaximumParticipants,
+
+                CategoryName = category?.CategoryName ?? "",
+                CategoryDescription = category?.Description ?? ""
+            });
         }
 
+
+        // POST: api/Events
         [HttpPost]
         public async Task<IActionResult> CreateEvent(EventDto dto)
         {
@@ -118,19 +157,12 @@ namespace RaceDayAPI.Controllers
                 });
             }
 
-            if (dto.DistanceKm <= 0)
+            if (dto.DistanceKm <= 0 ||
+                dto.MaximumParticipants <= 0)
             {
                 return BadRequest(new
                 {
-                    message = "Distance must be greater than zero."
-                });
-            }
-
-            if (dto.MaximumParticipants <= 0)
-            {
-                return BadRequest(new
-                {
-                    message = "Maximum participants must be greater than zero."
+                    message = "Distance and maximum participants must be greater than zero."
                 });
             }
 
@@ -180,8 +212,12 @@ namespace RaceDayAPI.Controllers
             });
         }
 
+
+
+        // PUT: api/Events/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateEvent(int id, EventDto dto)
+        public async Task<IActionResult> UpdateEvent(
+            int id, EventDto dto)
         {
             var roleCheck = RequireRole("Organiser");
             if (roleCheck != null) return roleCheck;
@@ -223,8 +259,18 @@ namespace RaceDayAPI.Controllers
                 });
             }
 
+            if (dto.DistanceKm <= 0 ||
+                dto.MaximumParticipants <= 0)
+            {
+                return BadRequest(new
+                {
+                    message = "Distance and maximum participants must be greater than zero."
+                });
+            }
+
             var route = await _context.Routes
-                .FirstOrDefaultAsync(r => r.RouteID == eventToUpdate.RouteID);
+                .FirstOrDefaultAsync(
+                    r => r.RouteID == eventToUpdate.RouteID);
 
             if (route == null)
             {
@@ -243,11 +289,13 @@ namespace RaceDayAPI.Controllers
             eventToUpdate.EventDate = dto.EventDate;
             eventToUpdate.Location = dto.Location;
             eventToUpdate.EntryFee = dto.EntryFee;
-            eventToUpdate.MaximumParticipants = dto.MaximumParticipants;
+            eventToUpdate.MaximumParticipants =
+                dto.MaximumParticipants;
             eventToUpdate.EventType = dto.EventType;
 
             var category = await _context.Categories
-                .FirstOrDefaultAsync(c => c.EventID == eventToUpdate.EventID);
+                .FirstOrDefaultAsync(
+                    c => c.EventID == eventToUpdate.EventID);
 
             if (category != null)
             {
@@ -274,6 +322,7 @@ namespace RaceDayAPI.Controllers
             });
         }
 
+        // DELETE: api/Events/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEvent(int id)
         {

@@ -110,6 +110,7 @@ namespace RaceDayAPI.Controllers
             return Ok(enrolments);
         }
 
+
         [HttpGet("event/{eventId}")]
         public async Task<IActionResult> GetEventEnrolments(int eventId)
         {
@@ -157,11 +158,15 @@ namespace RaceDayAPI.Controllers
                         u.Email,
                         e.CategoryID,
                         e.EnrolmentDate,
-                        e.Status
+                        e.Status,
+
+                        HasResult = _context.Results.Any(r =>
+                            r.EnrolmentID == e.EnrolmentID)
                     })
                 .ToListAsync();
 
             return Ok(enrolments);
         }
+
     }
 }
